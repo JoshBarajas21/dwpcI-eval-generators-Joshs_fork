@@ -11,3 +11,7 @@ Tu misión es modificar el código para lograr lo que falta, para ello deberas r
 las modificaciones.
 
 ⚠️ La idea no es remover las funciones generadoras, solo modificarlas para lograr el objetivo.
+
+# Response to requirement 📝
+
+First, on this page you can see the process to get the response of this requirement [Visit here]()
