@@ -47,10 +47,10 @@ const superHeroTeams = [
 ];
 
 // Función que itera sobre los poderes
-function* iteratePowers(superPowers) { 
+function* iteratePowers(superPowers, heroeVisited) { //se enañade superHero, para trabajar con el superHeroe de la funcion generadora iterateSuperHeroes
   for (let i = 0; i < superPowers.length; i++) { 
     const superPower = superPowers[i]; 
-    yield superPower; 
+    yield {superPower, heroeVisited}; //{indica un objeto, y que se puede trabajar con el}; se recibe un superpower y un super héroe
   }
 }
 
@@ -58,7 +58,7 @@ function* iteratePowers(superPowers) {
 function* iterateSuperHeores(superHeores) {
   for (let i = 0; i < superHeores.length; i++) {
     const superHeore = superHeores[i];
-    yield* iteratePowers(superHeore.superPowers);
+    yield* iteratePowers(superHeore.superPowers, superHeore); //Se le añade el "superHeroe", ahí se está enviando al superhéore mismo para seguir trabajando con el
   }
 }
 
@@ -70,27 +70,30 @@ function* iterateTeams(superHeoresTeams) {
   }
 }
 
+//Crea objeto generador (mandando al arreglo completo)
 const generatorObject = iterateTeams(superHeroTeams);
-
-// Obteniendo el primer resultado
-let result = generatorObject.next();
 
 // Datos de busqueda
 const superPowerWanted = "immortality"
-let counter = 0;
+//const superPowerWanted = prompt("¿Qué super poder buscamos?") //Me gusta añadir prompts para trabajar con el usuario :)
 
-while (!result.done) {
-  const superPower = result.value;
-  counter++;
+//let found = false; // Variable booleana para ver si hemos encontrado el superpoder
+let counter = 0; // Contador para llevar la cuenta de las comparaciones realizadas
+let found=false;
+// El bucle for..of  itera directamente sobre el objeto generador (generatorObject) y obtiene los valores de superPower y Héroes por cada iteración
+for (const { superPower, heroeVisited } of generatorObject) {
+  counter++; // Se incrementa el contador por cada iteración
+  
+// Se compara el superpoder actual con el superpoder buscado
   if (superPower === superPowerWanted) {
-    // Solo se imprime que el super poder ha sido encontrado
-    // pero no a que héroe pertenece
-    // deberia imprimir algo asi
-    // > El super poder de immortality le pertenece a Batman
-    console.log('Super Power has been found');
-    break;
-  } else {
-    result = generatorObject.next();
+    found=true; //aquí el super poder se ha encontrado
+    console.log(`El super poder de ${superPowerWanted} le pertenece a ${heroeVisited.name}`);   
+    break; // Se sale del bucle con break
   }
 }
-console.log(`El sistema realizo ${counter} comparaciones en el conjunto de datos`);
+
+//Si el superpoder no se encontró found equivale aún equivale a false; por tanto se imprime lo siguiente
+if(found === false){
+  console.log(`El super poder de ${superPowerWanted} no fue encontrado en el conjunto de datos`);
+}
+console.log(`El sistema realizó ${counter} comparaciones en el conjunto de datos`);
